@@ -40,15 +40,3 @@ def text_node_to_html_node(text_node):
     if text_node.text_type == text_type_image:
         return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
     raise ValueError(f"Invalid text type: {text_node.text_type}")
-
-
-def split_nodes_delimiter(old_nodes, delimiter, text_type):
-    new_nodes = []
-    for node in old_nodes:
-        if node.text_type is not text_type_text:
-            new_nodes.append(node)
-        else:
-            sub_nodes = node.text.split(delimiter)
-            for sub_node in sub_nodes:
-                pass
-    return new_nodes
