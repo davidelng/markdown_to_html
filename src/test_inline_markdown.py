@@ -2,14 +2,18 @@ import unittest
 from inline_markdown import (
     split_nodes_delimiter,
     extract_markdown_images,
-    extract_markdown_links
+    extract_markdown_links,
+    split_nodes_image,
+    split_nodes_link
 )
 from textnode import (
     TextNode,
     text_type_text,
     text_type_bold,
     text_type_italic,
-    text_type_code
+    text_type_code,
+    text_type_image,
+    text_type_link
 )
 
 
@@ -116,6 +120,43 @@ class TestInlineMarkdown(unittest.TestCase):
         self.assertListEqual(
             matches,
             [("a link", "https://www.boot.dev")]
+        )
+
+    def test_split_images(self):
+        node = TextNode(
+            "This is an ![image](https://www.boot.dev) and ![another](https://www.boot.dev) one", text_type_text)
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            new_nodes,
+            [
+                TextNode("This is an ", text_type_text),
+                TextNode("image", text_type_image, "https://www.boot.dev"),
+                TextNode(" and ", text_type_text),
+                TextNode("another", text_type_image, "https://www.boot.dev"),
+                TextNode(" one", text_type_text)
+            ]
+        )
+
+    def test_split_image(self):
+        node = TextNode("![image](image_link)", text_type_text)
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            new_nodes,
+            [TextNode("image", text_type_image, "image_link")]
+        )
+
+    def test_split_links(self):
+        node = TextNode(
+            "This is a [link](url) and [another one](url)", text_type_text)
+        new_nodes = split_nodes_link([node])
+        self.assertListEqual(
+            new_nodes,
+            [
+                TextNode("This is a ", text_type_text),
+                TextNode("link", text_type_link, "url"),
+                TextNode(" and ", text_type_text),
+                TextNode("another one", text_type_link, "url")
+            ]
         )
 
 
