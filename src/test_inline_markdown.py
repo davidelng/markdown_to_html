@@ -1,5 +1,9 @@
 import unittest
-from inline_markdown import split_nodes_delimiter
+from inline_markdown import (
+    split_nodes_delimiter,
+    extract_markdown_images,
+    extract_markdown_links
+)
 from textnode import (
     TextNode,
     text_type_text,
@@ -97,6 +101,22 @@ class TestInlineMarkdown(unittest.TestCase):
         with self.assertRaises(ValueError):
             node = TextNode("A malformed **bold phrase", text_type_text)
             new_nodes = split_nodes_delimiter([node], "**", text_type_bold)
+
+    def test_extract_images(self):
+        matches = extract_markdown_images(
+            "This is an image ![alt](https://www.boot.dev)")
+        self.assertListEqual(
+            matches,
+            [("alt", "https://www.boot.dev")]
+        )
+
+    def test_extract_links(self):
+        matches = extract_markdown_links(
+            "This is [a link](https://www.boot.dev)")
+        self.assertListEqual(
+            matches,
+            [("a link", "https://www.boot.dev")]
+        )
 
 
 if __name__ == "__main__":
