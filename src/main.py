@@ -1,10 +1,12 @@
 import os
 import shutil
 from copystatic import copy_files_recursive
-from generate_page import generate_page
+from generate_content import generate_pages_recursive
 
 dir_static = "./static"
 dir_public = "./public"
+dir_content = "./content"
+template_path = "./template.html"
 
 
 def main():
@@ -13,7 +15,12 @@ def main():
         shutil.rmtree(dir_public)
     print("Copying new static assets")
     copy_files_recursive(dir_static, dir_public)
-    generate_page("./content/index.md", "./template.html", "public/index.html")
+    # generate_page(
+    #     os.path.join(dir_content, "index.md"),
+    #     template_path,
+    #     os.path.join(dir_public, "index.html")
+    # )
+    generate_pages_recursive(dir_content, template_path, dir_public)
 
 
 main()
