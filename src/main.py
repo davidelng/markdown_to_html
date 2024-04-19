@@ -15,11 +15,6 @@ def main():
         shutil.rmtree(dir_public)
     print("Copying new static assets")
     copy_files_recursive(dir_static, dir_public)
-    # generate_page(
-    #     os.path.join(dir_content, "index.md"),
-    #     template_path,
-    #     os.path.join(dir_public, "index.html")
-    # )
     generate_pages_recursive(dir_content, template_path, dir_public)
 
 
